@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Library Management System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Library Management System</h1>
+
+    <div th:if="${message}" class="alert alert-success text-center shadow-sm" role="alert">
+        <strong th:text="${message}"></strong>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Borrow a Book</h4>
+                </div>
+                <div class="card-body">
+                    <form action="/borrow" method="post">
+
+                        <div class="mb-3">
+                            <label class="form-label">Select Book:</label>
+                            <select name="isbn" class="form-select" required>
+                                <option value="">-- Choose a Book --</option>
+                                <option th:each="book : ${books}"
+                                        th:value="${book.isbn}"
+                                        th:text="${book.title} + ' (' + ${book.isAvailable ? 'Available' : 'Checked Out'} + ')'"
+                                        th:disabled="${!book.isAvailable}">
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Select Patron:</label>
+                            <select name="patronId" class="form-select" required>
+                                <option value="">-- Choose a Patron --</option>
+                                <option value="P001">Alice Smith (P001)</option>
+                                <option value="P002">Bob Jones (P002)</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100">Checkout Book</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0">Return a Book</h4>
+                </div>
+                <div class="card-body">
+                    <form action="/return" method="post">
+
+                        <div class="mb-3">
+                            <label class="form-label">Select Book to Return:</label>
+                            <select name="isbn" class="form-select" required>
+                                <option value="">-- Choose a Book --</option>
+                                <option th:each="book : ${books}"
+                                        th:if="${!book.isAvailable}"
+                                        th:value="${book.isbn}"
+                                        th:text="${book.title}">
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3" style="height: 72px;"></div>
+
+                        <button type="submit" class="btn btn-success w-100">Return Book</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-secondary text-white">
+                    <h4 class="mb-0">Add New Book</h4>
+                </div>
+                <div class="card-body">
+                    <form action="/addBook" method="post">
+                        <div class="mb-2">
+                            <label class="form-label">ISBN</label>
+                            <input type="text" name="isbn" class="form-control" required>
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label">Title</label>
+                            <input type="text" name="title" class="form-control" required>
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label">Author</label>
+                            <input type="text" name="author" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Year</label>
+                            <input type="number" name="year" class="form-control" required>
+                        </div>
+                        <button type="submit" class="btn btn-dark w-100">Add to Inventory</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>
